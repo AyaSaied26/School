@@ -1,0 +1,35 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  # Spécifie la box à utiliser
+  config.vm.box = "ubuntu/bionic64"
+
+  # Augmenter le délai de démarrage pour éviter le timeout
+  config.vm.boot_timeout = 600
+
+  # Configuration du provider VirtualBox
+  config.vm.provider "virtualbox" do |vb|
+    # Définir la mémoire allouée à la machine virtuelle (2 Go ici)
+    vb.memory = "2048"
+
+    # Optionnel : activer l'interface graphique de VirtualBox
+    # vb.gui = true
+  end
+
+  # Rediriger le port 8080 de la machine virtuelle vers 8080 sur la machine hôte
+  config.vm.network "forwarded_port", guest: 8080, host: 8080
+
+  # Configuration réseau privée (optionnelle, si tu veux une IP fixe pour la VM)
+  # config.vm.network "private_network", ip: "192.168.33.10"
+
+  # Exemple de synchronisation de dossier (partager un dossier entre hôte et VM)
+  # Cette ligne permet de partager un dossier local sur la machine hôte avec la VM
+  config.vm.synced_folder ".", "/vagrant"
+
+  # Optionnel : provisionner avec un script shell pour installer des logiciels
+  # config.vm.provision "shell", inline: <<-SHELL
+  #   apt-get update
+  #   apt-get install -y apache2
+  # SHELL
+end
